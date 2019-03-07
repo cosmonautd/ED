@@ -19,6 +19,7 @@ Q = list()
 def fuzzy_controller(p_ref, p, v, f_prev):
     e = p - p_ref
 
+    # Fuzzificação das variáveis de entrada
     e_N = skfuzzy.sigmf(numpy.array([e]), -3, -1)[0]
     e_Z = skfuzzy.trimf(numpy.array([e]), [-3,  0, 3])[0]
     e_P = skfuzzy.sigmf(numpy.array([e]), 3, 1)[0]
@@ -27,6 +28,7 @@ def fuzzy_controller(p_ref, p, v, f_prev):
     v_Z = skfuzzy.trimf(numpy.array([v]), [-3,  0,  3])[0]
     v_P = skfuzzy.sigmf(numpy.array([v]), 3, 1)[0]
 
+    # Aplicação das operações fuzzy codificadas nas regras do modelo
     R1 = min(e_N, v_N)
     R2 = min(e_Z, v_N)
     R3 = min(e_P, v_N)
@@ -37,11 +39,14 @@ def fuzzy_controller(p_ref, p, v, f_prev):
     R8 = min(e_Z, v_P)
     R9 = min(e_P, v_P)
 
+    # Processo de combinação das regras e implicação sobre os conjuntos fuzzy de saída
     IT = numpy.sqrt(R1**2 + R2**2 + R3**2 + R4**2)
     NC = numpy.sqrt(R5**2)
     DT = numpy.sqrt(R6**2 + R7**2 + R8**2 + R9**2)
-
+    
+    # Deffuzificação usando o método da média ponderada
     output = (-0.5*DT + 0*NC + 0.5*IT)/(DT + NC + IT)
+    
     if f_prev == 0: f = output
     else: 
         f = f_prev + output*f_prev
