@@ -95,18 +95,18 @@ class FuzzyController:
         v_P = skfuzzy.interp_membership(self.velocity_range, self.v_P, v)
         # Aplicação das operações fuzzy codificadas nas regras do modelo
         R1 = numpy.fmin(e_N, v_N) # Se o sistema está abaixo da referência e movendo-se para baixo
-        R2 = numpy.fmin(e_Z, v_N) # Se o sistema está na referência e movendo-se para baixo
-        R3 = numpy.fmin(e_P, v_N) # Se o sistema está acima da referência e movendo-se para baixo
-        R4 = numpy.fmin(e_N, v_Z) # Se o sistema está abaixo da referência e sem movimento
+        R2 = numpy.fmin(e_N, v_Z) # Se o sistema está abaixo da referência e sem movimento
+        R3 = numpy.fmin(e_N, v_P) # Se o sistema está abaixo da referência e movendo-se para cima
+        R4 = numpy.fmin(e_Z, v_N) # Se o sistema está na referência e movendo-se para baixo
         R5 = numpy.fmin(e_Z, v_Z) # Se o sistema está na referência e sem movimento
-        R6 = numpy.fmin(e_P, v_Z) # Se o sistema está acima da referência e sem movimento
-        R7 = numpy.fmin(e_N, v_P) # Se o sistema está abaixo da referência e movendo-se para cima
-        R8 = numpy.fmin(e_Z, v_P) # Se o sistema está na referência e movendo-se para cima
+        R6 = numpy.fmin(e_Z, v_P) # Se o sistema está na referência e movendo-se para cima
+        R7 = numpy.fmin(e_P, v_N) # Se o sistema está acima da referência e movendo-se para baixo
+        R8 = numpy.fmin(e_P, v_Z) # Se o sistema está acima da referência e sem movimento
         R9 = numpy.fmin(e_P, v_P) # Se o sistema está acima da referência e movendo-se para cima
         # Combinação das regras
-        IT = R1 + R2 + R3 + R4
+        DT = R3 + R6 + R8 + R9
         NC = R5
-        DT = R6 + R7 + R8 + R9
+        IT = R1 + R2 + R4 + R7
         # Corte das funções de pertinência da variável de saída
         IT = numpy.fmin(IT, self.o_P)
         NC = numpy.fmin(NC, self.o_Z)
@@ -127,6 +127,14 @@ class FuzzyController:
             self.f = min(self.f, self.f_max)
 
         if view:
+            print('e:', e + 0.07)
+            print('e:N:', e_N)
+            print('e:Z:', e_Z)
+            print('e:P:', e_P)
+            print('v:', v)
+            print('v:N:', v_N)
+            print('v:Z:', v_Z)
+            print('v:P:', v_P)
             # Visualização das funções de pertinência associadas aos conjuntos fuzzy de saída
             out_ = numpy.zeros_like(self.output_range)
             fig, ax0 = plt.subplots(figsize=(8, 3))
@@ -169,10 +177,10 @@ class FuzzyController:
         return self.f
 
 fc = FuzzyController(ref=r, view=True)
-fc.infer(0,0,view=True)
+fc.infer(r,-5,view=True)
 
 for i in range(20*seconds):
-    f = fc.infer(p,v)
+    f = 0 # fc.infer(p,v)
     f_ = m*g + f
     a = f_/m
     v = v + a*t_
