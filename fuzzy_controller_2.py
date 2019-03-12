@@ -3,27 +3,37 @@ import skfuzzy
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+# Variável de tempo (s), intervalo de tempo (s) e constante de segundos
 t = 0
 t_ = 0.001
 seconds = int(1/t_)
 
+# Referência da posição (m)
 r = 4
+
+# Posição (m), velocidade (m/s), aceleração (m/s²) e massa (kg) do sistema
 p = 0
 v = 0
 a = 0
 m = 1
+
+# Aceleração da gravidade (m/s²)
 g = -9.8
-f = 0
-e = 0
+
+# Lista para armazenar as posições (P) e forças aplicadas pelo controlador (F)
+# a cada instante de tempo (T)
 P = list()
+F = list()
 T = list()
-Q = list()
 
 class FuzzyController:
 
     def __init__(self, ref, view=False):
-        # Referência
+        # Referência, força aplicada e força máxima capaz de ser aplicada
+        # pelo controlador
         self.ref = ref
+        self.f = 0
+        self.f_max = 1.5*abs(m*g)
         # Intervalos das variáveis de entrada
         self.position_error_range = numpy.arange(-10, 10, 0.01)
         self.velocity_range = numpy.arange(-10, 10, 0.01)
@@ -72,9 +82,9 @@ class FuzzyController:
 
             plt.tight_layout()
     
-    def infer(self, p, v, f_prev, view=False):
+    def infer(self, p, v, view=False):
         # Cálculo do erro de posição
-        e = p - self.ref - 0.065 # Correção de viés de 6,5 cm
+        e = p - self.ref - 0.07 # Correção de viés de 7,0 cm
         # Fuzzificação do erro de posição
         e_N = skfuzzy.interp_membership(self.position_error_range, self.e_N, e)
         e_Z = skfuzzy.interp_membership(self.position_error_range, self.e_Z, e)
@@ -105,6 +115,16 @@ class FuzzyController:
         aggregated = numpy.fmax(IT, numpy.fmax(NC, DT))
         # Deffuzificação
         output = skfuzzy.defuzz(self.output_range, aggregated, 'centroid')
+        # Atualização da força aplicada pelo sistema de controle
+        if self.f == 0: self.f = output*self.f_max
+        else:
+            # Incrementa ou decrementa a força atual aplicada de acordo com a
+            # saída do sistema fuzzy
+            self.f += output*self.f
+            # Impede que o sistema de controle aplique forças negativas
+            self.f = max(self.f, 0)
+            # Impede que o sistema de controle aplique uma força acima da máxima
+            self.f = min(self.f, self.f_max)
 
         if view:
             # Visualização das funções de pertinência associadas aos conjuntos fuzzy de saída
@@ -145,34 +165,28 @@ class FuzzyController:
                 ax.get_yaxis().tick_left()
 
             plt.tight_layout()
-        
-        if f_prev == 0: f = output
-        else: 
-            f = f_prev + output*f_prev
-            f = min(f, 1.5*abs(m*g))
-            f = max(f, 0)
 
-        return f
+        return self.f
 
 fc = FuzzyController(ref=r, view=True)
-fc.infer(0,0,0,view=True)
+fc.infer(0,0,view=True)
 
 for i in range(20*seconds):
-    f = fc.infer(p,v,f)
-    F = m*g + f
-    a = F/m
+    f = fc.infer(p,v)
+    f_ = m*g + f
+    a = f_/m
     v = v + a*t_
     p = max(p + v*t_, 0)
     if p == 0: v = 0
     P.append(p)
     T.append(t)
-    Q.append(f)
+    F.append(f)
     t += t_
 
 plt.figure()
 plt.plot(T, len(T)*[r], "b--", alpha=0.8, label="Referência (m)")
 plt.plot(T, P, "b", alpha=0.8, label="Posição (m)")
-plt.plot(T, Q, "r", alpha=0.8, label="Força aplicada (N)")
+plt.plot(T, F, "r", alpha=0.8, label="Força aplicada (N)")
 plt.legend()
 
 plt.show()
