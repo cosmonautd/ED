@@ -184,7 +184,7 @@ class FuzzyController:
 fc = FuzzyController(ref=r, view=True)
 # fc.infer(r,-5,view=True)
 
-for i in range(30*seconds):
+for i in range(15*seconds):
     f = fc.infer(p,v)
     f_ = m*g + f
     a = f_/m
