@@ -9,7 +9,7 @@ t_ = 0.001
 seconds = int(1/t_)
 
 # Referência da posição (m)
-r = 4
+r = 5
 
 # Posição (m), velocidade (m/s), aceleração (m/s²) e massa (kg) do sistema
 p = 0
@@ -35,8 +35,8 @@ class FuzzyController:
         self.f = 0
         self.f_max = 1.5*abs(m*g)
         # Intervalos das variáveis de entrada
-        self.position_error_range = numpy.arange(-10, 10, 0.01)
-        self.velocity_range = numpy.arange(-10, 10, 0.01)
+        self.position_error_range = numpy.arange(-100, 100, 0.01)
+        self.velocity_range = numpy.arange(-100, 100, 0.01)
         # Intervalo da variável de saída
         self.output_range = numpy.arange(-1, 1, 0.01)
         # Definição das funções de pertinência da variável de erro de posição
@@ -116,7 +116,12 @@ class FuzzyController:
         # Deffuzificação
         output = skfuzzy.defuzz(self.output_range, aggregated, 'centroid')
         # Atualização da força aplicada pelo sistema de controle
-        if self.f == 0: self.f = output*self.f_max
+        if self.f == 0:
+            self.f = output*self.f_max
+            # Impede que o sistema de controle aplique forças negativas
+            self.f = max(self.f, 0)
+            # Impede que o sistema de controle aplique uma força acima da máxima
+            self.f = min(self.f, self.f_max)
         else:
             # Incrementa ou decrementa a força atual aplicada de acordo com a
             # saída do sistema fuzzy
@@ -177,10 +182,10 @@ class FuzzyController:
         return self.f
 
 fc = FuzzyController(ref=r, view=True)
-fc.infer(r,-5,view=True)
+# fc.infer(r,-5,view=True)
 
-for i in range(20*seconds):
-    f = 0 # fc.infer(p,v)
+for i in range(30*seconds):
+    f = fc.infer(p,v)
     f_ = m*g + f
     a = f_/m
     v = v + a*t_
