@@ -181,25 +181,39 @@ class FuzzyController:
 
         return self.f
 
+# Instanciação de um objeto FuzzyController
 fc = FuzzyController(ref=r, view=True)
-# fc.infer(r,-5,view=True)
+# Teste de inferência
+fc.infer(r,-5,view=True)
 
-for i in range(15*seconds):
-    f = fc.infer(p,v)
-    f_ = m*g + f
-    a = f_/m
-    v = v + a*t_
-    p = max(p + v*t_, 0)
-    if p == 0: v = 0
-    P.append(p)
-    T.append(t)
-    F.append(f)
-    t += t_
+# # Início da simulação com duração de 15 segundos
+# for i in range(15*seconds):
+#     # Realiza inferência fuzzy com base na posição e velocidade atuais
+#     f = fc.infer(p,v)
+#     # Calcula a força vertical a ser aplicada sobre o veículo aéreo
+#     # Neste caso, a força da gravidade e a força aplicada pelo controlador
+#     f_ = m*g + f
+#     # Calcula a aceleração vertical resultante da aplicação da força
+#     a = f_/m
+#     # Atualiza a velocidade vertical do veículo aéreo
+#     v = v + a*t_
+#     # Atualiza a posição vertical do veículo aéreo
+#     p = max(p + v*t_, 0)
+#     # Caso o objeto atinja o chão, a velocidade cai para zero
+#     if p == 0: v = 0
+#     # Salva os valores de posição, tempo e força aplicada a cada instante
+#     P.append(p)
+#     T.append(t)
+#     F.append(f)
+#     # Atualiza a variável de tempo
+#     t += t_
 
-plt.figure()
-plt.plot(T, len(T)*[r], "b--", alpha=0.8, label="Referência (m)")
-plt.plot(T, P, "b", alpha=0.8, label="Posição (m)")
-plt.plot(T, F, "r", alpha=0.8, label="Força aplicada (N)")
-plt.legend()
+# # Plot do gráfico final com posição e força aplicada pelo controlador
+# # em função do tempo
+# plt.figure()
+# plt.plot(T, len(T)*[r], "b--", alpha=0.8, label="Referência (m)")
+# plt.plot(T, P, "b", alpha=0.8, label="Posição (m)")
+# plt.plot(T, F, "r", alpha=0.8, label="Força aplicada (N)")
+# plt.legend()
 
 plt.show()
