@@ -118,18 +118,14 @@ class FuzzyController:
         # Atualização da força aplicada pelo sistema de controle
         if self.f == 0:
             self.f = output*self.f_max
-            # Impede que o sistema de controle aplique forças negativas
-            self.f = max(self.f, 0)
-            # Impede que o sistema de controle aplique uma força acima da máxima
-            self.f = min(self.f, self.f_max)
         else:
             # Incrementa ou decrementa a força atual aplicada de acordo com a
             # saída do sistema fuzzy
             self.f += output*self.f
-            # Impede que o sistema de controle aplique forças negativas
-            self.f = max(self.f, 0)
-            # Impede que o sistema de controle aplique uma força acima da máxima
-            self.f = min(self.f, self.f_max)
+        # Impede que o sistema de controle aplique forças negativas
+        self.f = max(self.f, 0)
+        # Impede que o sistema de controle aplique uma força acima da máxima
+        self.f = min(self.f, self.f_max)
 
         if view:
             print('e:', e + 0.07)
