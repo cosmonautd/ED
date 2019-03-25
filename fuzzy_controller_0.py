@@ -128,14 +128,6 @@ class FuzzyController:
         self.f = min(self.f, self.f_max)
 
         if view:
-            print('e:', e + 0.07)
-            print('e:N:', e_N)
-            print('e:Z:', e_Z)
-            print('e:P:', e_P)
-            print('v:', v)
-            print('v:N:', v_N)
-            print('v:Z:', v_Z)
-            print('v:P:', v_P)
             # Visualização das funções de pertinência associadas aos conjuntos fuzzy de saída
             out_ = numpy.zeros_like(self.output_range)
             fig, ax0 = plt.subplots(figsize=(8, 3))
