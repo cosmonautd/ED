@@ -1,11 +1,15 @@
+import warnings
+warnings.filterwarnings(action='ignore')
+
 import os
 import cv2
 import numpy
 import keras
-import warnings
+import tensorflow
 import shapelib
 
-warnings.filterwarnings(action='ignore')
+numpy.random.seed(1)
+tensorflow.set_random_seed(1)
 
 method = [('neighborhood', 6, 6),
           ('neighborhood', 8, 2),

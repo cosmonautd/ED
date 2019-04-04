@@ -1,3 +1,6 @@
+import warnings
+warnings.filterwarnings(action='ignore')
+
 import cv2
 import keras
 import numpy

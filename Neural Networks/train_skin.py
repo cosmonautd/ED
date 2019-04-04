@@ -1,7 +1,14 @@
+import warnings
+warnings.filterwarnings(action='ignore')
+
 import cv2
 import numpy
 import keras
+import tensorflow
 import matplotlib.pyplot as plt
+
+numpy.random.seed(1)
+tensorflow.set_random_seed(1)
 
 # Leitura da base de dados de segmentação de pele
 # Cada linha contém uma amostra
