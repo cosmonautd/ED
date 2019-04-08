@@ -66,9 +66,7 @@ for train_index, test_index in cross_val.split(X,Y):
     # enfim, a camada de saída;
     # Neste exemplo, a classe Dense representa camadas totalmente conectadas
     model = keras.models.Sequential([
-        keras.layers.Dense(5, activation='sigmoid', input_shape=(d,)),
-        keras.layers.Dense(10, activation='sigmoid'),
-        keras.layers.Dense(5, activation='sigmoid'),
+        keras.layers.Dense(6, activation='sigmoid', input_shape=(d,)),
         keras.layers.Dense(2, activation='softmax')
     ])
 
