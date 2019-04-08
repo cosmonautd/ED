@@ -17,6 +17,7 @@ tensorflow.set_random_seed(1)
 # Os três primeiros números são os valores B, G e R de um pixel
 # O quarto número corresponde à classe do pixel: 1 para pele, 2 para não-pele
 # 50859 amostras de pele e 194198 de não-pele
+# Link: https://archive.ics.uci.edu/ml/datasets/Skin+Segmentation
 samples = list()
 with open('skin.txt') as skin:
     for row in skin.readlines():
