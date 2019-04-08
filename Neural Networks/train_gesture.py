@@ -41,16 +41,28 @@ method_1 = [('neighborhood', 6, 6),
             ('angle_plus', 25, 7)
 ]
 
+# Método 2 de extração de características de forma,
+# baseado na Transformada de Fourier
+method_2 = 'Fourier descriptors'
+
 # Definição do método de extração de características de forma a ser usado
 method = method_0
-# Cálculo e exibição do tamanho do descritor
-descriptor_size = (sum([n+1 for _,_,n in method]))
-print('Descriptor size: %d' % descriptor_size)
 
-# Formação da pilha de descritores a ser utilizada, técnica
-# baseada no artigo https://www.sciencedirect.com/science/article/pii/S0925231218306842
-stack = [shapelib.ContourDescriptor(mode=m[0], params=(m[1],), neurons=m[2]) for m in method]
-descriptor = shapelib.StackedContourDescriptor(stack)
+# Caso o método de descrição definido seja baseado em redes neurais randomizadas
+if method in [method_0, method_1]:
+    # Cálculo do tamanho do descritor
+    descriptor_size = sum([n+1 for _,_,n in method])
+    # Formação da pilha de descritores a ser utilizada, técnica
+    # baseada no artigo https://www.sciencedirect.com/science/article/pii/S0925231218306842
+    stack = [shapelib.ContourDescriptor(mode=m[0], params=(m[1],), neurons=m[2]) for m in method]
+    descriptor = shapelib.StackedContourDescriptor(stack)
+# Caso o método de descrição definido seja baseado na Transformada de Fourier
+elif method == method_2:
+    # Cálculo do tamanho do descritor
+    descriptor_size = 8
+
+# Exibição do tamanho do descritor
+print('Descriptor size: %d' % descriptor_size)
 
 # Lista para armazenar as amostras de gestos
 samples = list()
@@ -68,7 +80,23 @@ for f in sorted([f for f in os.listdir('gestures') if f.endswith('.png')]):
     # Leitura da imagem
     image = cv2.imread(os.path.join('gestures', f), 0)
     # Extração das características de forma
-    features = descriptor.extract_contour_features(image=image)
+    # Para os métodos baseados em redes neurais randomizadas
+    if method in [method_0, method_1]:
+        features = descriptor.extract_contour_features(image=image)
+    # Para o método baseado na Transformada de Fourier
+    elif method == method_2:
+        # Aplicação de uma limiarização na imagem
+        _, image = cv2.threshold(image, 127, 255, 0)
+        # Extração das coordenadas dos pontos do contorno
+        contours, _ = cv2.findContours(image, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+        # Extração do maior contorno
+        main_contour = max(contours, key=lambda x:len(x))
+        main_contour = numpy.reshape(main_contour, (len(main_contour), 2))
+        # Transformações no vetor do contorno para entrada na função fourierDescriptor
+        main_contour = main_contour.reshape(main_contour.shape[0], 1, main_contour.shape[1])
+        main_contour = numpy.asarray(main_contour, numpy.float32)
+        # Extração dos descritores de Fourier
+        features = cv2.ximgproc.fourierDescriptor(main_contour, 0, int(descriptor_size/2)).flatten()
     # Armazenamento das características e suas classes na lista de amostras
     samples.append(list(features) + [class_[f.split('_')[0]]])
 
