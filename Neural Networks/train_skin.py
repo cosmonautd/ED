@@ -7,6 +7,8 @@ import keras
 import tensorflow
 import matplotlib.pyplot as plt
 
+# Definição fixa das sementes dos geradores aleatórios
+# para facilitar a reprodução dos resultados
 numpy.random.seed(1)
 tensorflow.set_random_seed(1)
 
