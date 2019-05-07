@@ -1,5 +1,9 @@
+import os
 import warnings
+
+# Filtro para warnings irritantes
 warnings.filterwarnings(action='ignore')
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 import cv2
 import numpy
@@ -22,21 +26,21 @@ samples = list()
 with open('skin.txt') as skin:
     for row in skin.readlines():
         samples.append(list(map(int, row.split())))
+        samples[-1][-1] += -1
+
 # Representação do dataset como um array numpy
 dataset = numpy.array(samples)
 # Realiza uma permutação aleatória das amostras
 numpy.random.shuffle(dataset)
+# Trucamento do dataset para 20% das amostras
+dataset = dataset[:int(0.2*len(dataset)),:]
 
-# Número de amostras
-n = len(dataset)
-# Número de dimensões dos vetores de entrada
-d = 3
+# Número de amostras e dimensões dos vetores de entrada
+n, d = dataset.shape[0], dataset.shape[1] - 1
 
 # Preenchimento do vetor de amostras X e suas classes Y
-# A subtração de 1 no valor de Y serve para normalizar os índices
-# das classes para 0 e 1
 X = dataset[:,:d]
-Y = dataset[:,d:] - 1
+Y = dataset[:,d:]
 # Alteração da codificação do vetor de classes para one-hot-encoding
 # 0 torna-se [1, 0] e 1 torna-se [0, 1]
 Y = keras.utils.to_categorical(Y)
@@ -56,13 +60,18 @@ model = keras.models.Sequential([
 # Definição do algoritmo de otimização e da função de perda
 model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
+# Critério de parada
+# Caso a perda sobre a validação não decresça por 2 épocas, 
+# o treinamento é interrompido
+stop = keras.callbacks.EarlyStopping(monitor='val_loss', patience=2)
+
 # Treinamento
 # Executa o algoritmo de otimização, ajustando os pesos das conexões
 # da rede neural com base nos valores de entrada X e saída Y, usando
 # a função de perda como forma de verificar o quão corretas são suas
 # predições durante o treinamento. Realiza 5 passagens pelo conjunto
 # de treinamento. Utiliza 20% dos conjuntos X e Y como validação.
-history = model.fit(X, Y, epochs=5, validation_split=0.2)
+history = model.fit(X, Y, epochs=20, validation_split=0.2, callbacks=[stop])
 
 # Visualização da evolução da perda sobre os conjuntos de 
 # treinamento e validação
