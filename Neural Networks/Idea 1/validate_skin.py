@@ -40,8 +40,8 @@ X = dataset[:,:d]
 Y = dataset[:,d:] - 1
 
 # Instanciação do objeto responsável pela divisão de conjuntos de
-# treino e teste de acordo com a metodologia K-Fold com K = 10
-cross_val = StratifiedKFold(10)
+# treino e teste de acordo com a metodologia K-Fold com K = 5
+cross_val = StratifiedKFold(5)
 cross_val.get_n_splits(X)
 
 # Variável para armazenar acurácias
@@ -79,9 +79,9 @@ for train_index, test_index in cross_val.split(X,Y):
     # Executa o algoritmo de otimização, ajustando os pesos das conexões
     # da rede neural com base nos valores de entrada X e saída Y, usando
     # a função de perda como forma de verificar o quão corretas são suas
-    # predições durante o treinamento. Realiza 10 passagens pelo conjunto
+    # predições durante o treinamento. Realiza 5 passagens pelo conjunto
     # de treinamento. Utiliza 20% dos conjuntos X e Y como validação.
-    history = model.fit(X_train, Y_train, epochs=10, validation_split=0.2, verbose=0)
+    history = model.fit(X_train, Y_train, epochs=5, validation_split=0.2, verbose=0)
     
     # Teste
     # Avalia a rede neural treinada sobre o conjunto de teste e calcula a acurácia

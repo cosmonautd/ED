@@ -7,7 +7,7 @@ import numpy
 import keras
 import tensorflow
 import shapelib
-from sklearn.model_selection import StratifiedKFold
+import matplotlib.pyplot as plt
 
 # Definição fixa das sementes dos geradores aleatórios
 # para facilitar a reprodução dos resultados
@@ -113,58 +113,57 @@ d = descriptor_size
 # Preenchimento do vetor de amostras X e suas classes Y
 X = dataset[:,:d]
 Y = dataset[:,d:]
+# Alteração da codificação do vetor de classes para one-hot-encoding
+Y = keras.utils.to_categorical(Y)
 
-# Instanciação do objeto responsável pela divisão de conjuntos de
-# treino e teste de acordo com a metodologia K-Fold com K = 10
-cross_val = StratifiedKFold(10)
-cross_val.get_n_splits(X)
+# Instanciação de um modelo sequencial;
+# Este modelo é uma pilha de camadas de neurônios;
+# Sua construção é feita através da adição sequencial de camadas,
+# primeiramente a camada de entrada, depois as camadas e ocultas e, 
+# enfim, a camada de saída;
+# Neste exemplo, a classe Dense representa camadas totalmente conectadas
+model = keras.models.Sequential([
+    keras.layers.Dense(96, activation='sigmoid', input_shape=(d,)),
+    keras.layers.Dense(5, activation='softmax')
+])
 
-# Variável para armazenar acurácias
-kfold_scores = list()
+# Compilação do modelo
+# Definição do algoritmo de otimização e da função de perda
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
-# Percorre as divisões de conjuntos de treino e teste 10-Fold
-for train_index, test_index in cross_val.split(X,Y):
+# Treinamento
+# Executa o algoritmo de otimização, ajustando os pesos das conexões
+# da rede neural com base nos valores de entrada X e saída Y, usando
+# a função de perda como forma de verificar o quão corretas são suas
+# predições durante o treinamento. Realiza 50 passagens pelo conjunto
+# de treinamento. Utiliza 20% dos conjuntos X e Y como validação.
+history = model.fit(X, Y, epochs=50, validation_split=0.2)
 
-    # Assinala os conjuntos de treino e teste de acordo
-    # com os índices definidos
-    X_train, X_test = X[train_index], X[test_index]
-    Y_train, Y_test = Y[train_index], Y[test_index]
+# Visualização da evolução da perda sobre os conjuntos de 
+# treinamento e validação
+plt.figure()
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('Perda do modelo de classificação de gestos')
+plt.ylabel('Perda')
+plt.xlabel('Época')
+plt.legend(['Treinamento', 'Validação'], loc='upper right')
 
-    # Alteração da codificação do vetor de classes para one-hot-encoding
-    # 0 torna-se [1, 0] e 1 torna-se [0, 1]
-    Y_train = keras.utils.to_categorical(Y_train)
-    Y_test = keras.utils.to_categorical(Y_test)
+# Visualização da evolução da acurácia sobre os conjuntos de 
+# treinamento e validação
+plt.figure()
+plt.plot(history.history['acc'])
+plt.plot(history.history['val_acc'])
+plt.title('Acurácia do modelo de classificação de gestos')
+plt.ylabel('Acurácia')
+plt.xlabel('Época')
+plt.legend(['Treinamento', 'Validação'], loc='lower right')
+plt.show()
 
-    # Instanciação de um modelo sequencial;
-    # Este modelo é uma pilha de camadas de neurônios;
-    # Sua construção é feita através da adição sequencial de camadas,
-    # primeiramente a camada de entrada, depois as camadas e ocultas e, 
-    # enfim, a camada de saída;
-    # Neste exemplo, a classe Dense representa camadas totalmente conectadas
-    model = keras.models.Sequential([
-        keras.layers.Dense(96, activation='sigmoid', input_shape=(d,)),
-        keras.layers.Dense(5, activation='softmax')
-    ])
+# Salva a arquitetura da rede em um arquivo JSON
+model_json = model.to_json()
+with open('model_g.json', 'w') as json_file:
+    json_file.write(model_json)
 
-    # Compilação do modelo
-    # Definição do algoritmo de otimização e da função de perda
-    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-
-    # Treinamento
-    # Executa o algoritmo de otimização, ajustando os pesos das conexões
-    # da rede neural com base nos valores de entrada X e saída Y, usando
-    # a função de perda como forma de verificar o quão corretas são suas
-    # predições durante o treinamento. Realiza 10 passagens pelo conjunto
-    # de treinamento. Utiliza 20% dos conjuntos X e Y como validação.
-    model.fit(X_train, Y_train, epochs=50, validation_split=0.2, verbose=0)
-    
-    # Teste
-    # Avalia a rede neural treinada sobre o conjunto de teste e calcula a acurácia
-    scores = model.evaluate(X_test, Y_test, verbose=0)
-    print("%s: %.2f %%" % (model.metrics_names[1], scores[1]*100))
-
-    # Armazena a acurácia
-    kfold_scores.append(scores[1]*100)
-
-# Exibe a média dos resultados obtidos sobre todos os folds, junto com o desvio
-print("%.2f%% (+/- %.2f%%)" % (numpy.mean(kfold_scores), numpy.std(kfold_scores)))
+# Salva os pesos da rede em um arquivo HDF5
+model.save_weights("model_g.h5")

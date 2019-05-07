@@ -60,9 +60,9 @@ model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accur
 # Executa o algoritmo de otimização, ajustando os pesos das conexões
 # da rede neural com base nos valores de entrada X e saída Y, usando
 # a função de perda como forma de verificar o quão corretas são suas
-# predições durante o treinamento. Realiza 10 passagens pelo conjunto
+# predições durante o treinamento. Realiza 5 passagens pelo conjunto
 # de treinamento. Utiliza 20% dos conjuntos X e Y como validação.
-history = model.fit(X, Y, epochs=10, validation_split=0.2)
+history = model.fit(X, Y, epochs=5, validation_split=0.2)
 
 # Visualização da evolução da perda sobre os conjuntos de 
 # treinamento e validação
