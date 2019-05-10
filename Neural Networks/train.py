@@ -20,7 +20,7 @@ tensorflow.set_random_seed(1)
 # Cada linha contém uma amostra
 # Os três primeiros números são os valores B, G e R de um pixel
 # O quarto número corresponde à classe do pixel: 1 para pele, 2 para não-pele
-# 50859 amostras de pele e 194198 de não-pele
+# 50 859 amostras de pele e 194 198 de não-pele
 # Link: https://archive.ics.uci.edu/ml/datasets/Skin+Segmentation
 samples = list()
 with open('skin.txt') as skin:
@@ -32,8 +32,8 @@ with open('skin.txt') as skin:
 dataset = numpy.array(samples)
 # Realiza uma permutação aleatória das amostras
 numpy.random.shuffle(dataset)
-# Trucamento do dataset para 20% das amostras
-dataset = dataset[:int(0.2*len(dataset)),:]
+# Trucamento do dataset para 5% das amostras (12 252 amostras)
+dataset = dataset[:int(0.05*len(dataset)),:]
 
 # Número de amostras e dimensões dos vetores de entrada
 n, d = dataset.shape[0], dataset.shape[1] - 1

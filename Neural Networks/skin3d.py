@@ -6,7 +6,6 @@ warnings.filterwarnings(action='ignore')
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 import numpy
-import keras
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
@@ -26,13 +25,6 @@ with open('skin.txt') as skin:
     for row in skin.readlines():
         samples.append(list(map(int, row.split())))
         samples[-1][-1] += -1
-
-# Carrega a arquitetura da rede neural de segmentação de pele
-with open('model_s.json', 'r') as json_file:
-    model_json = json_file.read()
-    model_s = keras.models.model_from_json(model_json)
-# Carrega os pesos da rede neural de segmentação de pele
-model_s.load_weights("model_s.h5")
 
 # Representação do dataset como um array numpy
 dataset = numpy.array(samples)
@@ -59,19 +51,30 @@ C = dataset[:,3]
 # Scatter das amostras originais
 ax.scatter(R, G, B, c=C, alpha=0.3)
 
-# Plot nas dimensões finais da MLP
-# Instanciação de uma figura no matplotlib
-fig = plt.figure()
+if os.path.exists('model_s.json') and os.path.exists('model_s.h5'):
 
-# Obtenção da saída da MLP
-y = model_s.predict(dataset[:,:d])
+    import keras
 
-# Obtenção das dimensões das saídas MLP
-D1 = y[:,0]
-D2 = y[:,1]
+    # Carrega a arquitetura da rede neural de segmentação de pele
+    with open('model_s.json', 'r') as json_file:
+        model_json = json_file.read()
+        model_s = keras.models.model_from_json(model_json)
+    # Carrega os pesos da rede neural de segmentação de pele
+    model_s.load_weights('model_s.h5')
 
-# Scatter das representações finais da MLP
-plt.scatter(D1, D2, c=C, alpha=0.3)
+    # Obtenção da saída da MLP
+    y = model_s.predict(dataset[:,:d])
+
+    # Obtenção das dimensões das saídas MLP
+    D1 = y[:,0]
+    D2 = y[:,1]
+
+    # Plot nas dimensões finais da MLP
+    # Instanciação de uma figura no matplotlib
+    fig = plt.figure()
+
+    # Scatter das representações finais da MLP
+    plt.scatter(D1, D2, c=C, alpha=0.3)
 
 # Exibição das figuras
 plt.show()
