@@ -12,7 +12,7 @@ import numpy
 import matplotlib.pyplot as plt
 
 def show_image(images):
-    """ Displays images on screen
+    """ Exibe uma lista de imagens
     """
     n = len(images)
     if n == 1:
