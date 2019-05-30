@@ -35,12 +35,13 @@ def animate(args):
     dist = [1/f for f in fitness]
     y_min.append(numpy.min(dist))
     y_mean.append(numpy.mean(dist))
-    ax0.plot(x, y_min, color='red', alpha=0.5, label='Indivíduo mais apto')
-    ax0.plot(x, y_mean, color='blue', alpha=0.5, label='Média da população')
+    ax0.plot(x, y_min, color='red', alpha=0.7, label='Indivíduo mais apto')
+    ax0.plot(x, y_mean, color='blue', alpha=0.7, label='Média da população')
     ax0.legend(loc='upper right')
+    ax1.set_title('Indivíduo mais apto')
     ax1.set_xlim([-20, 210])
     ax1.set_ylim([-20, 210])
-    ax1.scatter(model.CITY_COORD[:,0], model.CITY_COORD[:,1], alpha=0.5)
+    ax1.scatter(model.CITY_COORD[:,0], model.CITY_COORD[:,1], color='black', alpha=0.85)
     solution = max(zip(population, fitness), key=lambda x:x[1])[0]
     P = numpy.array([model.CITY_DICT[s] for s in solution] + [model.CITY_DICT[solution[0]]])
     ax1.plot(P[:,0], P[:,1], color='red', alpha=0.85)
