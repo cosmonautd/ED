@@ -35,7 +35,8 @@ def fit(population):
     return fitness
 
 def elitism(population, fitness, n):
-    return [e[0] for e in sorted(zip(population, fitness), key=lambda x:x[1], reverse=True)[:n]]
+    return [e[0] for e in sorted(zip(population, fitness),
+                key=lambda x:x[1], reverse=True)[:n]]
 
 def selection(population, fitness, n):
     def roulette():
@@ -103,10 +104,3 @@ def mutation(children, mutation_rate=0.01):
 
 def stop():
     return False
-
-def plot(solution=None):
-    plt.scatter(CITY_COORD[:,0], CITY_COORD[:,1], alpha=0.5)
-    if solution:
-        P = numpy.array([CITY_DICT[s] for s in solution] + [CITY_DICT[solution[0]]])
-        plt.plot(P[:,0], P[:,1], 'red')
-    plt.show()
