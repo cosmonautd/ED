@@ -1,6 +1,6 @@
 import tsp as model
 
-def base_algorithm(pop_size, elite_size, max_generations):
+def base_algorithm(pop_size, max_generations, elite_size=0):
     population = model.init(pop_size)
     yield 0, population, model.fit(population)
     for g in range(max_generations):

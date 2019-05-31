@@ -6,7 +6,7 @@ import matplotlib
 import matplotlib.animation
 import matplotlib.pyplot as plt
 
-run = genetic.base_algorithm(pop_size=100, elite_size=20, max_generations=300)
+run = genetic.base_algorithm(pop_size=100, max_generations=300)
 
 matplotlib.rcParams['toolbar'] = 'None'
 fig, (ax0, ax1) = plt.subplots(ncols=2, figsize=(10, 5))

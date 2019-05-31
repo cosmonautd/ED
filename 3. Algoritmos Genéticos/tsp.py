@@ -34,10 +34,6 @@ def fit(population):
         fitness.append(1/distance)
     return fitness
 
-def elitism(population, fitness, n):
-    return [e[0] for e in sorted(zip(population, fitness),
-                key=lambda x:x[1], reverse=True)[:n]]
-
 def selection(population, fitness, n):
     def roulette():
         idx = numpy.arange(0, len(population))
@@ -60,22 +56,6 @@ def selection(population, fitness, n):
     return roulette()
 
 def crossover(parents, crossover_rate=0.9):
-    def onepoint():
-        children = list()
-        for (parent1, parent2) in parents:
-            if numpy.random.random() < crossover_rate:
-                point = numpy.random.randint(0, len(parent1))
-                child1 = parent1[:point] + parent2[point:]
-                child2 = parent2[:point] + parent1[point:]
-                children.append(child1)
-                children.append(child2)
-        return children
-    def multipoint(n):
-        raise NotImplementedError
-    def uniform():
-        raise NotImplementedError
-    def arithmetic():
-        raise NotImplementedError
     def ordered():
         children = list()
         for pair in parents:
@@ -112,3 +92,7 @@ def mutation(children, mutation_rate=0.01):
 
 def stop():
     return False
+
+def elitism(population, fitness, n):
+    return [e[0] for e in sorted(zip(population, fitness),
+                key=lambda x:x[1], reverse=True)[:n]]
