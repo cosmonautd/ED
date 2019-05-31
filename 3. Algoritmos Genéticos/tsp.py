@@ -51,6 +51,7 @@ def selection(population, fitness, n):
             argmax = numpy.argmax(turn_fitness)
             parents.append(population[argmax])
         parents = [(parents[i], parents[i+1]) for i in range(0, len(parents)-1, 2)]
+        return parents
     def ranking():
         raise NotImplementedError
     return roulette()
