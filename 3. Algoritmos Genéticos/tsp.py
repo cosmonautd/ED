@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 numpy.random.seed(1)
 
 N = 20
-CITY_LABELS = list(string.ascii_uppercase[:N])
+CITY_LABELS = list(range(N))
 CITY_COORD = numpy.random.randint(0, 200, (N, 2))
 CITY_DICT = {label : coord for (label, coord) in zip(CITY_LABELS, CITY_COORD)}
 
@@ -13,7 +13,7 @@ population_history = list()
 fitness_history = list()
 
 def init(pop_size):
-    def random__():
+    def random_permutation():
         population = list()
         for _ in range(pop_size):
             individual = list(numpy.random.permutation(CITY_LABELS))
@@ -21,7 +21,7 @@ def init(pop_size):
         return population
     def heuristic():
         raise NotImplementedError
-    return random__()
+    return random_permutation()
 
 def fit(population):
     fitness = list()
@@ -61,8 +61,16 @@ def selection(population, fitness, n):
 
 def crossover(parents, crossover_rate=0.9):
     def onepoint():
-        raise NotImplementedError
-    def multipoint():
+        children = list()
+        for (parent1, parent2) in parents:
+            if numpy.random.random() < crossover_rate:
+                point = numpy.random.randint(0, len(parent1))
+                child1 = parent1[:point] + parent2[point:]
+                child2 = parent2[:point] + parent1[point:]
+                children.append(child1)
+                children.append(child2)
+        return children
+    def multipoint(n):
         raise NotImplementedError
     def uniform():
         raise NotImplementedError

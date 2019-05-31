@@ -1,25 +1,14 @@
+import genetic
 import tsp as model
+
 import numpy
-
-def ga(pop_size, elite_size, max_generations):
-    population = model.init(pop_size)
-    yield 0, population, model.fit(population)
-    for g in range(max_generations):
-        fitness = model.fit(population)
-        elite = model.elitism(population, fitness, elite_size)
-        parents = model.selection(population, fitness, pop_size - elite_size)
-        children = model.crossover(parents)
-        children = model.mutation(children)
-        population = elite + children
-        yield g+1, population, model.fit(population)
-        if model.stop(): break
-
 import matplotlib
 import matplotlib.animation
 import matplotlib.pyplot as plt
 
-matplotlib.rcParams['toolbar'] = 'None'
+run = genetic.base_algorithm(pop_size=100, elite_size=20, max_generations=300)
 
+matplotlib.rcParams['toolbar'] = 'None'
 fig, (ax0, ax1) = plt.subplots(ncols=2, figsize=(10, 5))
 
 x = []
@@ -48,7 +37,7 @@ def animate(args):
     return
 
 anim = matplotlib.animation.FuncAnimation(
-        fig, animate, frames=ga(100, 20, 300), interval=10, repeat=False)
+        fig, animate, frames=run, interval=10, repeat=False)
 
 plt.tight_layout(pad=3.5)
 plt.show()
