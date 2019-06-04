@@ -96,7 +96,7 @@ mlp_weights_path = "saved_weights/cifar10_mlp_best.hdf5"
 # Train the mlp
 checkpointer_mlp = ModelCheckpoint(filepath=mlp_weights_path, verbose=1, save_best_only=True)
 hist_mlp = mlp.fit(processed_data.x_train, processed_data.y_train, batch_size=32, 
-                   epochs=100, validation_data=(processed_data.x_valid,
+                   epochs=20, validation_data=(processed_data.x_valid,
                                                 processed_data.y_valid),
                    callbacks=[checkpointer_mlp], shuffle=True)
 
