@@ -54,9 +54,9 @@ def build_mlp(data, categories):
     # Create model architecture
     model = Sequential()
     model.add(Flatten(input_shape=data.x_train.shape[1:]))
-    model.add(Dense(1000, activation="relu"))
+    model.add(Dense(320, activation="relu"))
     model.add(Dropout(0.2))
-    model.add(Dense(512, activation="relu"))
+    model.add(Dense(160, activation="relu"))
     model.add(Dropout(0.2))
     model.add(Dense(categories, activation="softmax"))
     
