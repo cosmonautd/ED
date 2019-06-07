@@ -4,6 +4,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from collections import namedtuple as nt
 
+# Código modificado de https://www.peculiar-coding-endeavours.com/2018/mlp_vs_cnn/
+
 # Definição do nível de log do Python e TensorFlow
 warnings.filterwarnings("ignore")
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
