@@ -1,6 +1,9 @@
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 from collections import namedtuple as nt
+
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 Data = nt("Data", "x_train y_train x_valid y_valid x_test y_test")
 
@@ -72,7 +75,7 @@ print(np.unique(y_train, return_counts=True))
 data = Data(x_train, y_train, None, None, x_test, y_test)
 
 # Visualize the data
-visualize_data(data)
+# visualize_data(data)
 
 # Preprocess the data
 categories = len(np.unique(data.y_train))
