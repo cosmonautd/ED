@@ -6,7 +6,9 @@ import matplotlib
 import matplotlib.animation
 import matplotlib.pyplot as plt
 
-run = genetic.base_algorithm(pop_size=100, max_generations=300)
+# Definição dos parâmetros do algoritmo genético
+# O gerador será posteriormente utilizada para produzir a animação em tempo real
+run = genetic.base_algorithm(pop_size=100, max_generations=300, elite_size=10)
 
 matplotlib.rcParams['toolbar'] = 'None'
 fig, (ax0, ax1) = plt.subplots(ncols=2, figsize=(10, 5))
@@ -36,8 +38,14 @@ def animate(args):
     ax1.plot(P[:,0], P[:,1], color='red', alpha=0.85)
     return
 
-anim = matplotlib.animation.FuncAnimation(
-        fig, animate, frames=run, interval=10, repeat=False)
+try:
 
-plt.tight_layout(pad=3.5)
-plt.show()
+    anim = matplotlib.animation.FuncAnimation(
+            fig, animate, frames=run, interval=10, repeat=False)
+
+    plt.tight_layout(pad=3.5)
+    plt.show()
+
+except AttributeError:
+
+    pass
