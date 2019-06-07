@@ -1,9 +1,11 @@
 import os
+import warnings
 import numpy as np
 import matplotlib.pyplot as plt
 from collections import namedtuple as nt
 
-# Definição do nível de log do TensorFlow
+# Definição do nível de log do Python e TensorFlow
+warnings.filterwarnings("ignore")
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 # Criação de diretório para armazenar os pesos treinados

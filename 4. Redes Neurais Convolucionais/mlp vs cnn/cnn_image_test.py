@@ -1,7 +1,12 @@
 import os
+import warnings
 import numpy as np
 import matplotlib.pyplot as plt
 from collections import namedtuple as nt
+
+# Definição do nível de log do Python e TensorFlow
+warnings.filterwarnings("ignore")
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 # Importação de modelos, camadas, datasets e utilidades do Keras
 from keras.models import Sequential
@@ -10,50 +15,65 @@ from keras.utils import to_categorical
 from keras.callbacks import ModelCheckpoint
 from keras.datasets import cifar10
 
-# Definição dos dados de treinamento, validação e teste como uma tupla
-Data = nt("Data", "x_train y_train x_valid y_valid x_test y_test")
+# Importação de otimizações para a CNN
+from keras.layers import BatchNormalization
+from keras.optimizers import rmsprop
+from keras.callbacks import LearningRateScheduler, EarlyStopping
+from keras.preprocessing.image import ImageDataGenerator
+from keras import regularizers
 
-# Função de pré-processamento dos dados
-def preprocess(data, categories):
-    # Normalização dos valores dos pixels para o intervalo [0, 1]
-    x_train = data.x_train.astype("float32") / 255
-    x_test = data.x_test.astype("float32") / 255
-    # Representação one-hot-encoding para os rótulos
-    y_train = to_categorical(data.y_train, categories)
-    y_test = to_categorical(data.y_test, categories)
-    return Data(x_train[5000:], y_train[5000:],
-                x_train[:5000], y_train[:5000],
-                x_test, y_test)
-
-# Função para construção da CNN
-def build_cnn():
+# Função para construção da CNN otimizada
+def build_optimized_cnn():
     # Organização sequencial de camadas
+    weight_decay = 1e-4
     model = Sequential()
-    model.add(Conv2D(filters=16, kernel_size=2, padding="same", activation="relu",
+    model.add(Conv2D(32, kernel_size=3, padding="same", activation="elu",
+                     kernel_regularizer=regularizers.l2(weight_decay), 
                      input_shape=(32,32,3)))
+    model.add(BatchNormalization())
+    model.add(Conv2D(32, kernel_size=3, padding="same", activation="elu",
+                     kernel_regularizer=regularizers.l2(weight_decay)))
+    model.add(BatchNormalization())
     model.add(MaxPooling2D(pool_size=2))
-    model.add(Conv2D(filters=32, kernel_size=2, padding="same", activation="relu"))
-    model.add(MaxPooling2D(pool_size=2))
-    model.add(Conv2D(filters=64, kernel_size=2, padding="same", activation="relu"))
+    model.add(Dropout(0.2))
+
+    model.add(Conv2D(64, kernel_size=3, padding="same", activation="elu",
+                     kernel_regularizer=regularizers.l2(weight_decay)))
+    model.add(BatchNormalization())
+    model.add(Conv2D(64, kernel_size=3, padding="same", activation="elu",
+                     kernel_regularizer=regularizers.l2(weight_decay)))
+    model.add(BatchNormalization())
     model.add(MaxPooling2D(pool_size=2))
     model.add(Dropout(0.3))
-    model.add(Flatten())
-    model.add(Dense(100, activation="relu"))
+
+    model.add(Conv2D(128, kernel_size=3, padding="same", activation="elu",
+                     kernel_regularizer=regularizers.l2(weight_decay)))
+    model.add(BatchNormalization())
+    model.add(Conv2D(128, kernel_size=3, padding="same", activation="elu",
+                     kernel_regularizer=regularizers.l2(weight_decay)))
+    model.add(BatchNormalization())
+    model.add(MaxPooling2D(pool_size=2))
     model.add(Dropout(0.4))
+
+    model.add(Flatten())
     model.add(Dense(10, activation="softmax"))
-    
+
     # Compilação do modelo. Definição da função de perda e algoritmo de treinamento.
-    model.compile(loss="categorical_crossentropy", optimizer="rmsprop",
+    optimized_rmsprop = rmsprop(lr=0.001,decay=1e-6)
+    model.compile(loss="categorical_crossentropy", optimizer=optimized_rmsprop,
                   metrics=["accuracy"])
     return model
 
-
-# Construção da CNN
-cnn = build_cnn()
+# Construção da CNN otimizada
+optimized_cnn = build_optimized_cnn()
 
 # Carregamento da melhor combinação de pesos salva
-cnn_weights_path = "saved_weights/cifar10_cnn_best.hdf5"
-cnn.load_weights(cnn_weights_path)
+try:
+    optimized_cnn_path_best = "saved_weights/optimized_cifar10_cnn_best.hdf5"
+    optimized_cnn.load_weights(optimized_cnn_path_best)
+except OSError:
+    print("Arquivo de pesos treinados não encontrado")
+    quit()
 
 # Importação do OpenCV
 import cv2
@@ -64,7 +84,7 @@ image = cv2.imread('test.jpg')
 image = image.reshape((1,32,32,3))
 
 # Obtenção da saída da rede
-output = cnn.predict(image)
+output = optimized_cnn.predict(image)
 # Obtenção da classe
 class_ = np.argmax(output)
 print(class_)
