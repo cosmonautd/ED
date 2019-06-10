@@ -1,12 +1,15 @@
 import os
+import logging
 import warnings
 import numpy as np
 import matplotlib.pyplot as plt
 from collections import namedtuple as nt
+import tensorflow
 
 # Código modificado de https://www.peculiar-coding-endeavours.com/2018/mlp_vs_cnn/
 
 # Definição do nível de log do Python e TensorFlow
+tensorflow.get_logger().setLevel(logging.ERROR)
 warnings.filterwarnings("ignore")
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
