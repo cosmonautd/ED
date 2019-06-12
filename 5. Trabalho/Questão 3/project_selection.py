@@ -2,27 +2,37 @@ import numpy
 import string
 import matplotlib.pyplot as plt
 
-# Configuração do gerador aleatório para reproducibilidade
-numpy.random.seed(1)
+# V: A verba liberada pelo governo
+V = 300
 
-W = 300
-p = numpy.random.randint(1, 100, 25)
-w = numpy.random.randint(1, 100, 25)
-N = len(p)
+# N: A quantidade de projetos submetidos
+# c: Os custos de cada projeto (em milhões)
+# q: A estimativa da quantidade de pessoas beneficiadas por cada projeto (em milhões)
+N = numpy.random.randint(20, 30)
+c = list(numpy.random.randint(10, 99, N))
+q = list(numpy.random.randint(10, 99, N))
  
 # Função de inicialização da população
 def init(pop_size):
+    # A população é uma lista de indivíduos
     population = list()
     for _ in range(pop_size):
+        # Cada indivíduo é uma lista binária de comprimento N
+        # A presença do valor 1 no índice i indice que o projeto i faz 
+        # parte do conjunto de projetos selecionados.
         individual = list(numpy.random.randint(0, 2, N))
         population.append(individual)
     return population
 
 # Função de aptidão
 def fit(population):
+    # Lista de aptidões
     fitness = list()
+    # A aptidão é calculada para todos os indíduos da população
     for individual in population:
+        # TODO: Implementar o cálculo da aptidão do indivíduo
         f = 1
+        # Fim do cálculo da aptidão do indivíduo
         fitness.append(f)
     return fitness
 
@@ -59,9 +69,6 @@ def selection(population, fitness, n):
         # Organiza os pais em pares
         parents = [(list(parents[i]), list(parents[i+1])) for i in range(0, len(parents)-1, 2)]
         return parents
-    # Método do Ranking
-    def ranking():
-        raise NotImplementedError
     # Escolha do método de seleção
     return roulette()
 
@@ -73,15 +80,26 @@ def crossover(parents, crossover_rate):
     for pair in parents:
         parent1 = pair[0]
         parent2 = pair[1]
-        children.append(parent1)
-        children.append(parent2)
+        # TODO: Cruzamento ocorre com determinada probabilidade
+        if False:
+            # TODO: Implementar o método de cruzamento
+            # Os pais (parent1 e parent2) são listas binárias de comprimento N
+            pass
+        else:
+            # Caso o cruzamento não ocorra, os pais permanecem na próxima geração
+            children.append(parent1)
+            children.append(parent2)
     return children
 
 # Função de mutação
 def mutation(children, mutation_rate):
     # Mutação pode ocorrer em qualquer dos filhos
     for i, child in enumerate(children):
-        pass
+        # TODO: Mutação ocorre com determinada probabilidade
+        if False:
+            # TODO: Implementar o método de mutação
+            # Um filho (child) é uma lista binária de comprimento N
+            pass
     return children
 
 # Função de critério de parada
@@ -96,16 +114,15 @@ def elitism(population, fitness, n):
 
 # https://codereview.stackexchange.com/questions/20569/dynamic-programming-knapsack-solution
 # A Dynamic Programming based Python Program for 0-1 Knapsack problem
-# Returns the maximum value that can be put in a knapsack of capacity W
+# Returns the maximum value that can be put in a knapsack of capacity V
 def maxknapsack():
-    K = [[0 for x in range(W+1)] for x in range(N+1)]
-    # Build table K[][] in bottom up manner
+    K = [[0 for x in range(V+1)] for x in range(N+1)]
     for i in range(N+1):
-        for w_ in range(W+1):
-            if i==0 or w_==0:
-                K[i][w_] = 0
-            elif w[i-1] <= w_:
-                K[i][w_] = max(p[i-1] + K[i-1][w_-w[i-1]],  K[i-1][w_])
+        for w in range(V+1):
+            if i==0 or w==0:
+                K[i][w] = 0
+            elif c[i-1] <= w:
+                K[i][w] = max(q[i-1] + K[i-1][w-c[i-1]],  K[i-1][w])
             else:
-                K[i][w_] = K[i-1][w_]
-    return K[N][W]
+                K[i][w] = K[i-1][w]
+    return K[N][V]
