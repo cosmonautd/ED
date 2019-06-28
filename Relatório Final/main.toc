@@ -1,0 +1,27 @@
+\changetocdepth {4}
+\babel@toc {brazil}{}
+\setlength {\cftchapterindent }{\cftlastnumwidth } \setlength {\cftchapternumwidth }{2em}
+\contentsline {chapter}{Sum\'ario}{2}{section*.3}
+\setlength {\cftchapterindent }{0em} \setlength {\cftchapternumwidth }{\cftlastnumwidth }
+\contentsline {chapter}{\chapternumberline {1}\MakeTextUppercase {Identifica\IeC {\c c}\IeC {\~a}o do aluno}}{3}{chapter.1}
+\setlength {\cftchapterindent }{0em} \setlength {\cftchapternumwidth }{\cftlastnumwidth }
+\contentsline {chapter}{\chapternumberline {2}\MakeTextUppercase {Atividades relacionadas \IeC {\`a} reg\IeC {\^e}ncia de classe}}{4}{chapter.2}
+\contentsline {section}{\numberline {2.1}Aula sobre Sistemas Fuzzy}{4}{section.2.1}
+\contentsline {section}{\numberline {2.2}Aula sobre Perceptron Multicamadas}{4}{section.2.2}
+\contentsline {section}{\numberline {2.3}Aula sobre Algoritmos Gen\IeC {\'e}ticos}{4}{section.2.3}
+\contentsline {section}{\numberline {2.4}Primeira aula sobre Redes Neurais Convolucionais}{5}{section.2.4}
+\contentsline {section}{\numberline {2.5}Segunda aula sobre Redes Neurais Convolucionais}{5}{section.2.5}
+\setlength {\cftchapterindent }{0em} \setlength {\cftchapternumwidth }{\cftlastnumwidth }
+\contentsline {chapter}{\chapternumberline {3}\MakeTextUppercase {Atividades de prepara\IeC {\c c}\IeC {\~a}o das aulas}}{6}{chapter.3}
+\contentsline {section}{\numberline {3.1}Carga hor\IeC {\'a}ria utilizada para prepara\IeC {\c c}\IeC {\~a}o das aulas}{6}{section.3.1}
+\contentsline {section}{\numberline {3.2}Bibliografia}{6}{section.3.2}
+\contentsline {section}{\numberline {3.3}Material did\IeC {\'a}tico produzido}{6}{section.3.3}
+\setlength {\cftchapterindent }{0em} \setlength {\cftchapternumwidth }{\cftlastnumwidth }
+\contentsline {chapter}{\chapternumberline {4}\MakeTextUppercase {Autoavalia\IeC {\c c}\IeC {\~a}o sobre o est\IeC {\'a}gio de doc\IeC {\^e}ncia}}{7}{chapter.4}
+\contentsline {section}{\numberline {4.1}Autocr\IeC {\'\i }tica sobre o desempenho do mestrando}{7}{section.4.1}
+\contentsline {section}{\numberline {4.2}Sugest\IeC {\~o}es para o aprimoramento da disciplina}{7}{section.4.2}
+\contentsline {section}{\numberline {4.3}Resultados da avalia\IeC {\c c}\IeC {\~a}o docente}{7}{section.4.3}
+\contentsline {section}{\numberline {4.4}Contribui\IeC {\c c}\IeC {\~a}o do est\IeC {\'a}gio para a forma\IeC {\c c}\IeC {\~a}o profisisonal do aluno de mestrado}{7}{section.4.4}
+\setlength {\cftchapterindent }{0em} \setlength {\cftchapternumwidth }{\cftlastnumwidth }
+\contentsline {chapter}{\chapternumberline {5}\MakeTextUppercase {Parecer do professor respons\IeC {\'a}vel}}{8}{chapter.5}
+\vspace {\cftbeforechapterskip }

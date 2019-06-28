@@ -1,0 +1,458 @@
+\title{TCCEC}
+
+\documentclass[
+	% -- opções da classe memoir --
+	12pt,				% tamanho da fonte
+	openright,			% capítulos começam em pág ímpar (insere página vazia caso preciso)
+	oneside,			% para impressão em verso e anverso. Oposto a twoside
+	a4paper,			% tamanho do papel. 
+	% -- opções da classe abntex2 --
+	chapter=TITLE,		% títulos de capítulos convertidos em letras maiúsculas
+	section=TITLE,		% títulos de seções convertidos em letras maiúsculas
+	%subsection=TITLE,	% títulos de subseções convertidos em letras maiúsculas
+	%subsubsection=TITLE,% títulos de subsubseções convertidos em letras maiúsculas
+	% -- opções do pacote babel --
+	english,			% idioma adicional para hifenização
+	french,				% idioma adicional para hifenização
+	spanish,			% idioma adicional para hifenização
+	brazil				% o último idioma é o principal do documento
+	]{abntex2}
+
+% ---
+% Pacotes básicos 
+% ---
+\usepackage{lmodern}			% Usa a fonte Latin Modern
+\usepackage[T1]{fontenc}		% Selecao de codigos de fonte.
+\usepackage[utf8]{inputenc}		% Codificacao do documento (conversão automática dos acentos)
+\usepackage{lastpage}			% Usado pela Ficha catalográfica
+\usepackage{indentfirst}		% Indenta o primeiro parágrafo de cada seção.
+\usepackage{color}				% Controle das cores
+\usepackage{graphicx}			% Inclusão de gráficos
+\usepackage{microtype} 			% para melhorias de justificação
+% ---
+		
+% ---
+% Pacotes adicionais, usados apenas no âmbito do Modelo Canônico do abnteX2
+% ---
+\usepackage{lipsum}				% para geração de dummy text
+% ---
+
+% ---
+% Pacotes de citações
+% ---
+\usepackage[brazilian,hyperpageref]{backref}	 % Paginas com as citações na bibl
+\usepackage[num,abnt-etal-list=0,abnt-etal-cite=3]{abntex2cite}	% Citações padrão ABNT
+
+\usepackage{cite}
+\renewcommand\citeleft{[}
+\renewcommand\citeright{]}
+
+% --- 
+% CONFIGURAÇÕES DE PACOTES
+% --- 
+
+% ---
+% Configurações do pacote backref
+% Usado sem a opção hyperpageref de backref
+\renewcommand{\backrefpagesname}{Citado na(s) página(s):~}
+% Texto padrão antes do número das páginas
+\renewcommand{\backref}{}
+% Define os textos da citação
+\renewcommand*{\backrefalt}[4]{
+	\ifcase #1 %
+		Nenhuma citação no texto.%
+	\or
+		Citado na página #2.%
+	\else
+		Citado #1 vezes nas páginas #2.%
+	\fi}%
+% ---
+
+% ---
+% Informações de dados para CAPA e FOLHA DE ROSTO
+% ---
+\titulo{Relatório de Estágio de Docência}
+\autor{Carlos David Braga Borges}
+\local{SOBRAL}
+\data{2019}
+\orientador{Jarbas Joaci de Mesquita Sá Junior}
+\coorientador{}
+\instituicao{%
+  Universidade Federal do Ceará \par
+  Curso de Engenharia de Computação \par
+  Campus Sobral}
+\tipotrabalho{Relatório}
+% O preambulo deve conter o tipo do trabalho, o objetivo, 
+% o nome da instituição e a área de concentração 
+\preambulo{O estágio de docência do estudante Carlos David Braga Borges é adequado para a aprovação na disciplina de Estágio de Docência no Programa de Pós-Graduação em Engenharia Elétrica e de Computação (PPGEEC).}
+% ---
+
+% ---
+% Configurações de aparência do PDF final
+
+% alterando o aspecto da cor azul
+\definecolor{blue}{RGB}{41,5,195}
+
+% informações do PDF
+\makeatletter
+\hypersetup{
+     	%pagebackref=true,
+		pdftitle={\@title}, 
+		pdfauthor={},
+    	pdfsubject={\imprimirpreambulo},
+	    pdfcreator={LaTeX with abnTeX2},
+		pdfkeywords={wow}{much work}{so engineer}, 
+		colorlinks=true,       		% false: boxed links; true: colored links
+    	linkcolor=blue,          	% color of internal links
+    	citecolor=blue,        		% color of links to bibliography
+    	filecolor=magenta,      		% color of file links
+		urlcolor=blue,
+		bookmarksdepth=4
+}
+\makeatother
+% --- 
+
+% --- 
+% Espaçamentos entre linhas e parágrafos 
+% --- 
+
+% O tamanho do parágrafo é dado por:
+\setlength{\parindent}{1.3cm}
+
+% Controle do espaçamento entre um parágrafo e outro:
+\setlength{\parskip}{0.2cm}  % tente também \onelineskip
+
+% ---
+% compila o indice
+% ---
+\makeindex
+% ---
+
+\usepackage{silence}
+\WarningFilter{caption}{Unsupported document class}
+\WarningFilter{caption}{The option `hypcap=true' will be ignored}
+
+% Pacotes extras utilizados no trabalho
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{nomencl}
+\renewcommand{\nomname}{\listadesiglasname}
+\makenomenclature
+\newcommand{\citet}[1]{\citeauthor{#1} (\citeyear{#1})}
+\usepackage{float}
+\usepackage{enumitem}  
+\SetLabelAlign{parright}{\strut\smash{\parbox[t]{\labelwidth}{\raggedleft#1}}}
+\setlist[description]{style=multiline,leftmargin=1.2cm,noitemsep}
+\usepackage{array}
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+\usepackage[caption=false]{subfig}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{enumitem}
+\setlist[itemize]{nosep}
+\setlist[enumerate]{nosep}
+\usepackage{algpseudocode}
+\usepackage[boxed]{algorithm}
+\usepackage[table, dvipsnames]{xcolor}
+\usepackage{multirow}
+\usepackage{pbox}
+\usepackage[export]{adjustbox}
+
+\def\changemargin#1#2{\list{}{\rightmargin#2\leftmargin#1}\item[]}
+\let\endchangemargin=\endlist
+\usepackage{babel}
+\usepackage[table]{xcolor}
+\usepackage{collcell}
+\usepackage{hhline}
+\usepackage{pgf}
+\usepackage{multirow}
+\def\colorModel{hsb} %You can use rgb or hsb
+\newcommand\ColCell[1]{
+  \pgfmathparse{#1<150?1:0}  %Threshold for changing the font color into the cells
+    \ifnum\pgfmathresult=0\relax\color{white}\fi
+  \pgfmathsetmacro\compA{0}      %Component R or H
+  \pgfmathsetmacro\compB{#1/15} %Component G or S
+  \pgfmathsetmacro\compC{1}      %Component B or B
+  \edef\x{\noexpand\centering\noexpand\cellcolor[\colorModel]{\compA,\compB,\compC}}\x #1
+  } 
+\newcolumntype{E}{>{\collectcell\ColCell}m{0.4cm}<{\endcollectcell}}  %Cell width
+\newcommand*\rot{\rotatebox{90}}
+
+\usepackage{caption}
+
+% ----
+% Início do documento
+% ----
+\begin{document}
+
+% Retira espaço extra obsoleto entre as frases.
+\frenchspacing 
+
+% ----------------------------------------------------------
+% ELEMENTOS PRÉ-TEXTUAIS
+% ----------------------------------------------------------
+\pretextual
+
+% ---
+% Capa
+% ---
+\begin{figure}
+\centering
+\includegraphics[scale=0.6]{graphics/ufc}
+\end{figure}
+
+\begin{center}
+\ABNTEXchapterfont\large
+\textbf{UNIVERSIDADE FEDERAL DO CEARÁ} \\
+\textbf{CAMPUS SOBRAL} \\
+\textbf{PROGRAMA DE PÓS-GRADUAÇÃO EM ENGENHARIA ELÉTRICA E DE COMPUTAÇÃO} \\
+\vspace{1cm}
+\ABNTEXchapterfont\large
+
+\end{center}
+
+\vspace{1cm}
+
+\imprimircapa
+
+
+\setlength\parindent{0pt}
+
+\begin{folhadeaprovacao}
+	
+	\begin{center}
+		{\ABNTEXchapterfont\large\imprimirautor}
+		
+		\vspace{-8cm}
+		
+		\vspace*{\fill}\vspace*{\fill}
+		\begin{center}
+			\ABNTEXchapterfont\bfseries\Large\imprimirtitulo
+		\end{center}
+		\vspace*{\fill}
+		
+		\hspace{.45\textwidth}
+		\begin{minipage}{.5\textwidth}
+			\imprimirpreambulo
+		\end{minipage}%
+		\vspace*{\fill}
+	\end{center}
+	
+	\vspace{-1cm}
+	
+	\assinatura{\textbf{\imprimirautor} \\ Aluno}
+	\assinatura{\textbf{\imprimirorientador} \\ Orientador} 
+	
+\end{folhadeaprovacao}
+
+\tableofcontents
+
+\pagestyle{headings}
+\chapter{Identificação do aluno}
+
+\textbf{Nome do Aluno:} Carlos David Braga Borges
+
+\textbf{Matrícula:} 431976
+
+\textbf{IES na qual o estágio foi realizado:} Universidade Federal do Ceará -- Campus Sobral
+
+\textbf{Curso de graduação no qual o estágio foi realizado:} Engenharia de Computação
+
+\textbf{Disciplina na qual o estágio foi realizado:} Inteligência Computacional
+
+\textbf{Professor responsável pela disciplina}: Jarbas Joaci de Mesquita Sá Junior
+
+\textbf{Semestre da disciplina}: 5º semestre
+
+\textbf{Período:} 2019.1
+
+
+\newpage
+
+\chapter{Atividades relacionadas à regência de classe}
+
+\newcommand{\tabitem}{~~\llap{\textbullet}~~}
+
+\section{Aula sobre Sistemas Fuzzy}
+\begin{tabular}{ |l|l|l|l| }
+\hline
+\multicolumn{4}{ |c| }{\cellcolor{gray!50} \textbf{Atividades realizadas}} \\ \hline 
+Semestre: 6º & Disciplina: Inteligência Computacional & Aula 1 & Data: 22/03/2019 \\ \hline
+\multicolumn{2}{ |c| }{Tema: Sistemas Fuzzy} & \multicolumn{2}{ c| }{Duração da aula: 2h} \\ \hline
+\multicolumn{4}{ |c| }{\cellcolor{gray!50} \textbf{Objetivos}} \\ \hline 
+\multicolumn{4}{ |c| }{
+	\vtop{
+		\hbox{\strut \tabitem Objetivo 1}
+		\hbox{\strut \tabitem Objetivo 2}
+		\hbox{\strut \tabitem Objetivo 3}
+	}
+} \\ \hline 
+\multicolumn{4}{ |c| }{\cellcolor{gray!50} \textbf{Síntese do conteúdo}} \\ \hline 
+\multicolumn{4}{ |c| }{
+	!!!
+} \\ \hline
+\end{tabular}
+
+\section{Aula sobre Perceptron Multicamadas}
+\begin{tabular}{ |l|l|l|l| }
+	\hline
+	\multicolumn{4}{ |c| }{\cellcolor{gray!50} \textbf{Atividades realizadas}} \\ \hline 
+	Semestre: 6º & Disciplina: Inteligência Computacional & Aula 1 & Data: 22/03/2019 \\ \hline
+	\multicolumn{2}{ |c| }{Tema: Sistemas Fuzzy} & \multicolumn{2}{ c| }{Duração da aula: 2h} \\ \hline
+	\multicolumn{4}{ |c| }{\cellcolor{gray!50} \textbf{Objetivos}} \\ \hline 
+	\multicolumn{4}{ |c| }{
+		\vtop{
+			\hbox{\strut \tabitem Objetivo 1}
+			\hbox{\strut \tabitem Objetivo 2}
+			\hbox{\strut \tabitem Objetivo 3}
+		}
+	} \\ \hline 
+	\multicolumn{4}{ |c| }{\cellcolor{gray!50} \textbf{Síntese do conteúdo}} \\ \hline 
+	\multicolumn{4}{ |c| }{
+		!!!
+	} \\ \hline
+\end{tabular}
+
+\section{Aula sobre Algoritmos Genéticos}
+\begin{tabular}{ |l|l|l|l| }
+	\hline
+	\multicolumn{4}{ |c| }{\cellcolor{gray!50} \textbf{Atividades realizadas}} \\ \hline 
+	Semestre: 6º & Disciplina: Inteligência Computacional & Aula 1 & Data: 22/03/2019 \\ \hline
+	\multicolumn{2}{ |c| }{Tema: Sistemas Fuzzy} & \multicolumn{2}{ c| }{Duração da aula: 2h} \\ \hline
+	\multicolumn{4}{ |c| }{\cellcolor{gray!50} \textbf{Objetivos}} \\ \hline 
+	\multicolumn{4}{ |c| }{
+		\vtop{
+			\hbox{\strut \tabitem Objetivo 1}
+			\hbox{\strut \tabitem Objetivo 2}
+			\hbox{\strut \tabitem Objetivo 3}
+		}
+	} \\ \hline 
+	\multicolumn{4}{ |c| }{\cellcolor{gray!50} \textbf{Síntese do conteúdo}} \\ \hline 
+	\multicolumn{4}{ |c| }{
+		!!!
+	} \\ \hline
+\end{tabular}
+
+\section{Primeira aula sobre Redes Neurais Convolucionais}
+\begin{tabular}{ |l|l|l|l| }
+	\hline
+	\multicolumn{4}{ |c| }{\cellcolor{gray!50} \textbf{Atividades realizadas}} \\ \hline 
+	Semestre: 6º & Disciplina: Inteligência Computacional & Aula 1 & Data: 22/03/2019 \\ \hline
+	\multicolumn{2}{ |c| }{Tema: Sistemas Fuzzy} & \multicolumn{2}{ c| }{Duração da aula: 2h} \\ \hline
+	\multicolumn{4}{ |c| }{\cellcolor{gray!50} \textbf{Objetivos}} \\ \hline 
+	\multicolumn{4}{ |c| }{
+		\vtop{
+			\hbox{\strut \tabitem Objetivo 1}
+			\hbox{\strut \tabitem Objetivo 2}
+			\hbox{\strut \tabitem Objetivo 3}
+		}
+	} \\ \hline 
+	\multicolumn{4}{ |c| }{\cellcolor{gray!50} \textbf{Síntese do conteúdo}} \\ \hline 
+	\multicolumn{4}{ |c| }{
+		!!!
+	} \\ \hline
+\end{tabular}
+
+\section{Segunda aula sobre Redes Neurais Convolucionais}
+\begin{tabular}{ |l|l|l|l| }
+	\hline
+	\multicolumn{4}{ |c| }{\cellcolor{gray!50} \textbf{Atividades realizadas}} \\ \hline 
+	Semestre: 6º & Disciplina: Inteligência Computacional & Aula 1 & Data: 22/03/2019 \\ \hline
+	\multicolumn{2}{ |c| }{Tema: Sistemas Fuzzy} & \multicolumn{2}{ c| }{Duração da aula: 2h} \\ \hline
+	\multicolumn{4}{ |c| }{\cellcolor{gray!50} \textbf{Objetivos}} \\ \hline 
+	\multicolumn{4}{ |c| }{
+		\vtop{
+			\hbox{\strut \tabitem Objetivo 1}
+			\hbox{\strut \tabitem Objetivo 2}
+			\hbox{\strut \tabitem Objetivo 3}
+		}
+	} \\ \hline 
+	\multicolumn{4}{ |c| }{\cellcolor{gray!50} \textbf{Síntese do conteúdo}} \\ \hline 
+	\multicolumn{4}{ |c| }{
+		!!!
+	} \\ \hline
+\end{tabular}
+
+\vspace{1cm}
+
+\begin{tabular}{ |l|l|l|l| }
+	\hline
+	\multicolumn{4}{ |c| }{\cellcolor{gray!50} \textbf{Atividades realizadas}} \\ \hline 
+	Semestre: 6º & Disciplina: Inteligência Computacional & Aula 1 & Data: 22/03/2019 \\ \hline
+	\multicolumn{2}{ |c| }{Tema: Sistemas Fuzzy} & \multicolumn{2}{ c| }{Duração da aula: 2h} \\ \hline
+	\multicolumn{4}{ |c| }{\cellcolor{gray!50} \textbf{Objetivos}} \\ \hline 
+	\multicolumn{4}{ |c| }{
+		\vtop{
+			\hbox{\strut \tabitem Objetivo 1}
+			\hbox{\strut \tabitem Objetivo 2}
+			\hbox{\strut \tabitem Objetivo 3}
+		}
+	} \\ \hline 
+	\multicolumn{4}{ |c| }{\cellcolor{gray!50} \textbf{Síntese do conteúdo}} \\ \hline 
+	\multicolumn{4}{ |c| }{
+		!!!
+	} \\ \hline
+\end{tabular}
+
+
+\newpage
+
+\chapter{Atividades de preparação das aulas}
+
+\section{Carga horária utilizada para preparação das aulas}
+
+\begin{center}
+	\begin{tabular}{ |c|c|c|c| }
+		\hline
+		\cellcolor{gray!50} \textbf{Aula} & \cellcolor{gray!50} \textbf{Data} & 
+		\cellcolor{gray!50} \vtop{
+			\hbox{\strut \textbf{Carga Horária}}
+			\hbox{\strut \textbf{(Sala de aula)}}
+		} &
+		\cellcolor{gray!50} \vtop{
+			\hbox{\strut \ \ \ \ \textbf{Carga Horária}}
+			\hbox{\strut \textbf{(Preparação de aula)}}
+		} \\ \hline
+		Aula 1 & 22/03/2019 & 2h & 10h \\ \hline
+		Aula 2 & 10/05/2019 & 2h & 16h \\ \hline
+		Aula 3 & 31/05/2019 & 2h & 16h \\ \hline
+		Aula 4 & 05/06/2019 & 2h & 20h \\ \hline
+		Aula 5 & 07/06/2019 & 2h & 20h \\ \hline
+		Aula 6 & 14/06/2019 & 2h & 4h \\ \hline
+		\cellcolor{gray!50} \textbf{Total} & \cellcolor{gray!50} & \cellcolor{gray!50} \textbf{12h} & \cellcolor{gray!50} \textbf{86h} \\ \hline
+	\end{tabular}
+\end{center}
+
+\section{Bibliografia}
+
+\section{Material didático produzido}
+
+
+\newpage
+\chapter{Autoavaliação sobre o estágio de docência}
+
+\section{Autocrítica sobre o desempenho do mestrando}
+
+\section{Sugestões para o aprimoramento da disciplina}
+
+\section{Resultados da avaliação docente}
+
+\section{Contribuição do estágio para a formação profisisonal do aluno de mestrado}
+
+
+\newpage
+\chapter{Parecer do professor responsável}
+
+\postextual
+\newpage
+\pagestyle{empty}
+% ----------------------------------------------------------
+
+% ----------------------------------------------------------
+% Referências bibliográficas
+% ----------------------------------------------------------
+
+%\bibliographystyle{abntex2-num}
+%\bibliography{references}
+
+\end{document}
