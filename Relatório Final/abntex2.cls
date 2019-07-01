@@ -656,7 +656,7 @@
 % ---
 % Configura layout para elementos pre-textuais
 \newcommand{\pretextual}{%
-  \aliaspagestyle{chapter}{empty}% customizing chapter pagestyle
+  \aliaspagestyle{chapter}{plain}% customizing chapter pagestyle
   \pagestyle{empty}
   \aliaspagestyle{cleared}{empty}
   \aliaspagestyle{part}{empty}
